@@ -79,18 +79,25 @@
         .server-links { font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 40px; }
         .welcome-text { color: #ccc; font-size: 15px; max-width: 450px; line-height: 1.6; font-weight: 300; }
 
-        /* Статистика БЕЗ иконок */
         .server-block { grid-column: 3; grid-row: 1; flex-direction: column; justify-content: center; }
         .server-stat { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 15px; }
         .server-stat-label { color: rgba(255,255,255,0.6); }
         .server-stat-value { font-weight: 700; }
 
+        /* Персонал - обновленная сетка на 4 человека */
         .staff-block { grid-column: 3; grid-row: 2; flex-direction: column; }
-        .staff-block h2 { font-size: 22px; margin: 0 0 20px 0; font-weight: 700; color: #d32f2f; text-align: center;}
-        .staff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; flex: 1; align-items: center;}
-        .staff-avatar { width: 60px; height: 60px; border-radius: 12px; background: #222; margin: 0 auto 10px; border: 2px solid rgba(255,255,255,0.1); object-fit: cover; }
-        .staff-name { font-size: 12px; font-weight: 700; }
-        .staff-rank { font-size: 10px; color: rgba(255,255,255,0.5); text-transform: uppercase; }
+        .staff-block h2 { font-size: 22px; margin: 0 0 15px 0; font-weight: 700; color: #d32f2f; text-align: center;}
+        .staff-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); /* 2 колонки, 2 ряда */
+            gap: 10px; 
+            text-align: center; 
+            flex: 1; 
+            align-items: center;
+        }
+        .staff-avatar { width: 50px; height: 50px; border-radius: 10px; background: #222; margin: 0 auto 5px; border: 2px solid rgba(255,255,255,0.1); object-fit: cover; }
+        .staff-name { font-size: 11px; font-weight: 700; white-space: nowrap; }
+        .staff-rank { font-size: 9px; color: rgba(255,255,255,0.5); text-transform: uppercase; }
 
         .loading-bar-wrapper { position: fixed; bottom: 40px; left: 5%; width: 28%; display: flex; justify-content: space-between; align-items: center; z-index: 20; text-transform: uppercase; font-weight: 900; }
         .load-percent { color: #d32f2f; font-size: 16px;}
@@ -156,6 +163,7 @@
                 <div class="staff-item"><img src="tasid.png" class="staff-avatar"><div class="staff-name">De Lacure</div><div class="staff-rank">Создатель</div></div>
                 <div class="staff-item"><img src="zrasy.png" class="staff-avatar"><div class="staff-name">Adolf Miller</div><div class="staff-rank">Руководитель</div></div>
                 <div class="staff-item"><img src="daltron.png" class="staff-avatar"><div class="staff-name">Veil Maier</div><div class="staff-rank">Куратор</div></div>
+                <div class="staff-item"><img src="admin.png" class="staff-avatar"><div class="staff-name">Paul Hausser</div><div class="staff-rank">Гл. Управляющий</div></div>
             </div>
         </div>
     </div>
@@ -176,7 +184,6 @@
             document.getElementById('maxplayers').innerHTML = maxplayers;
 
             if (steamid && steamid.length > 5) {
-                // Прямая ссылка на аватар через steamid.xyz
                 document.getElementById('player-avatar').src = "https://www.steamid.xyz/avatar/" + steamid + ".png";
             }
         }
