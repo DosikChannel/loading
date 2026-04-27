@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>SPN BORDER RP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ОСНОВНЫЕ СТИЛИ */
+        * { box-sizing: border-box; user-select: none; }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Roboto', sans-serif;
+            color: #eeeeee;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+        }
+
+        /* ТВОЙ ФОН (ТЕПЕРЬ ИЗ ФАЙЛА) */
+        .bg-media {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+        }
+        
+        #bg-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.5); /* Затемнение фона */
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.2);
+            z-index: -1;
+        }
+
+        /* Главная сетка блоков */
+        .main-wrapper {
+            display: grid;
+            grid-template-columns: 28% 1fr 28%;
+            grid-template-rows: auto 1fr;
+            gap: 20px;
+            width: 90%;
+            height: 85%;
+            z-index: 10;
+        }
+
+        .info-block {
+            background: rgba(0, 0, 0, 0.85); 
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Игрок */
+        .player-block {
+            grid-column: 1; grid-row: 1;
+            display: flex; align-items: center;
+        }
+        
+        .avatar-placeholder {
+            width: 55px; height: 55px;
+            background-color: #d32f2f;
+            border-radius: 8px;
+            display: flex; justify-content: center; align-items: center;
+            margin-right: 15px;
+        }
+        
+        .avatar-placeholder svg { width: 30px; fill: white; }
+        .player-data { font-size: 14px; }
+        .data-label { color: rgba(255,255,255,0.6); }
+
+        /* Правила */
+        .rules-block { grid-column: 1; grid-row: 2; }
+        .rules-block h2 { font-size: 22px; margin: 0 0 15px 0; font-weight: 700; }
+        .rules-list { list-style: none; padding: 0; margin: 0; font-size: 15px; line-height: 1.8; }
+        .rules-list li { position: relative; padding-left: 25px; margin-bottom: 5px; }
+        .rules-list li::before {
+            content: attr(data-num);
+            position: absolute; left: 0; color: #d32f2f; font-weight: 900;
+        }
+
+        /* Центральная часть */
+        .center-content {
+            grid-column: 2; grid-row: 1 / span 2;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            text-align: center; padding: 0 30px;
+        }
+        
+        .server-title { font-weight: 900; font-size: 60px; margin: 0; text-transform: uppercase; line-height: 1; }
+        .server-title span { color: #d32f2f; }
+        .server-desc { font-size: 18px; color: #d32f2f; margin: 15px 0; font-weight: 500; }
+        .server-links { font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 30px; }
+        .main-text { font-size: 16px; max-width: 500px; line-height: 1.6; font-weight: 400; color: #ccc; }
+
+        /* Карта */
+        .server-block { grid-column: 3; grid-row: 1; display: flex; flex-direction: column; justify-content: center; }
+        .server-stat { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 14px; }
+        .server-stat-label { color: rgba(255,255,255,0.6); }
+
+        /* Персонал */
+        .staff-block { grid-column: 3; grid-row: 2; }
+        .staff-block h2 { font-size: 22px; margin: 0 0 20px 0; font-weight: 700; }
+        .staff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; }
+        .staff-avatar { 
+            width: 55px; height: 55px; border-radius: 10px; 
+            background: #222; margin: 0 auto 8px; border: 1px solid rgba(255,255,255,0.1); 
+        }
+        .staff-name { font-size: 14px; font-weight: 700; }
+        .staff-rank { font-size: 11px; color: rgba(255,255,255,0.5); }
+
+        /* Загрузка слева */
+        .loading-bar-wrapper {
+            position: fixed;
+            bottom: 40px;
+            left: 5%; 
+            width: 28%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 900;
+            z-index: 20;
+        }
+        
+        .load-status { text-transform: uppercase; letter-spacing: 2px; }
+        .load-percent { color: #d32f2f; }
+        
+        .bottom-loading-bar {
+            position: fixed;
+            bottom: 30px;
+            left: 5%;
+            width: 28%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            z-index: 20;
+        }
+        
+        #progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: #d32f2f;
+            transition: width 0.3s;
+        }
+
+        .blink { animation: blinker 1.5s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0.3; } }
+    </style>
+</head>
+<body>
+
+    <div class="bg-media">
+        <img src="background.png" id="bg-image">
+    </div>
+
+    <audio id="loading-music" src="music.mp3" autoplay loop></audio>
+
+    <div class="main-wrapper">
+        
+        <div class="info-block player-block">
+            <div class="avatar-placeholder">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
+            <div class="player-data">
+                <div><span class="data-label">Никнейм:</span> <span id="playername">Игрок</span></div>
+                <div><span class="data-label">SteamID:</span> <span id="steamid">Loading...</span></div>
+            </div>
+        </div>
+
+        <div class="info-block rules-block">
+            <h2>Правила Сервера</h2>
+            <ul class="rules-list">
+                <li data-num="1">Запрещено RDM (Убийство без причины).</li>
+                <li data-num="2">Соблюдайте NLR (Правило новой жизни).</li>
+                <li data-num="3">Запрещено быть назойливым.</li>
+                <li data-num="4">Оскорбления недопустимы.</li>
+                <li data-num="5">Читерство = Бан навсегда.</li>
+                <li data-num="6">Багоюз строго карается.</li>
+                <li data-num="7">Читайте полные правила в !motd.</li>
+            </ul>
+        </div>
+
+        <div class="center-content">
+            <h1 class="server-title">SPN ・ <span>★</span> BORDER</h1>
+            <h1 class="server-title">RP <span>★</span></h1>
+            <p class="server-desc">Уникальный опыт RolePlay</p>
+            <div class="server-links">
+                Группа ВК: vk.com/spnborder | Discord: https://discord.gg/csqPk4TZCx
+            </div>
+            <p class="main-text">
+                Добро пожаловать! Мы создали этот сервер для тех, кто ценит качественный отыгрыш и стабильную игру. Удачи!
+            </p>
+        </div>
+
+        <div class="info-block server-block">
+            <div class="server-stat"><span class="server-stat-label">Карта:</span> <span id="mapname">Загрузка...</span></div>
+            <div class="server-stat"><span class="server-stat-label">Режим:</span> <span>RolePlay</span></div>
+            <div class="server-stat"><span class="server-stat-label">Слотов:</span> <span>100 / 128</span></div>
+        </div>
+
+        <div class="info-block staff-block">
+            <h2>Персонал сервера</h2>
+<div class="staff-item">
+    <img src="tasid.png" class="staff-avatar">
+    <div class="staff-name">De Lacure</div>
+    <div class="staff-rank">Создатель</div>
+</div>
+
+<div class="staff-item">
+    <img src="zrasy.png" class="staff-avatar">
+    <div class="staff-name">Adolf Miller</div>
+    <div class="staff-rank">Руководитель</div>
+</div>
+
+<div class="staff-item">
+    <img src="daltron.png" class="staff-avatar">
+    <div class="staff-name">Veil Maier</div>
+    <div class="staff-rank">Куратор</div>
+</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="loading-bar-wrapper">
+        <div class="load-status blink" id="status">Загрузка файлов...</div>
+        <div class="load-percent" id="percent">0%</div>
+    </div>
+    <div class="bottom-loading-bar">
+        <div id="progress-bar-fill"></div>
+    </div>
+
+    <script type="text/javascript">
+        var music = document.getElementById("loading-music");
+        music.volume = 0.2; // Громкость 20%
+
+        function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
+            document.getElementById('mapname').innerHTML = mapname;
+            document.getElementById('steamid').innerHTML = steamid;
+        }
+
+        function SetStatusChanged(status) {
+            document.getElementById('status').innerHTML = status.toUpperCase();
+        }
+
+        var totalFiles = 100;
+        function SetFilesTotal(total) { totalFiles = total; }
+
+        function SetFilesNeeded(needed) {
+            var progress = Math.min(100, Math.floor(((totalFiles - needed) / totalFiles) * 100));
+            document.getElementById('progress-bar-fill').style.width = progress + '%';
+            document.getElementById('percent').innerHTML = progress + '%';
+        }
+    </script>
+</body>
+</html>
