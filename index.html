@@ -6,22 +6,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     
     <style>
-        /* ОСНОВНЫЕ СТИЛИ */
-        * { box-sizing: border-box; user-select: none; }
+        /* ОСНОВНЫЕ СТИЛИ - ГЛОБАЛЬНОЕ ВЫРАВНИВАНИЕ */
+        * { box-sizing: border-box; user-select: none; margin: 0; padding: 0; }
 
         body {
-            margin: 0; padding: 0;
             font-family: 'Roboto', sans-serif;
             color: #eeeeee;
             height: 100vh;
+            width: 100vw;
             overflow: hidden;
+            background-color: #000;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #000;
         }
 
-        /* ТВОЙ ФОН (ТЕПЕРЬ ИЗ ФАЙЛА) */
+        /* ТВОЙ ФОН */
         .bg-media {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -32,14 +32,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: brightness(0.5); /* Затемнение фона */
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.2);
-            z-index: -1;
+            filter: brightness(0.35); /* Чуть сильнее затемнил для читаемости текста */
         }
 
         /* Главная сетка блоков */
@@ -58,102 +51,139 @@
             border-radius: 12px;
             padding: 25px;
             border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex; /* Для внутреннего выравнивания */
         }
 
-        /* Игрок */
+        /* Игрок (Аватарка и ID) */
         .player-block {
             grid-column: 1; grid-row: 1;
-            display: flex; align-items: center;
+            align-items: center;
         }
         
-        .avatar-placeholder {
+        #player-avatar {
             width: 55px; height: 55px;
-            background-color: #d32f2f;
             border-radius: 8px;
-            display: flex; justify-content: center; align-items: center;
             margin-right: 15px;
+            background-color: #333;
+            object-fit: cover;
+            border: 1px solid rgba(255,255,255,0.1);
         }
         
-        .avatar-placeholder svg { width: 30px; fill: white; }
-        .player-data { font-size: 14px; }
+        .player-data { font-size: 14px; flex: 1; }
         .data-label { color: rgba(255,255,255,0.6); }
 
         /* Правила */
-        .rules-block { grid-column: 1; grid-row: 2; }
-        .rules-block h2 { font-size: 22px; margin: 0 0 15px 0; font-weight: 700; }
-        .rules-list { list-style: none; padding: 0; margin: 0; font-size: 15px; line-height: 1.8; }
+        .rules-block { 
+            grid-column: 1; grid-row: 2; 
+            flex-direction: column;
+        }
+        .rules-block h2 { font-size: 22px; margin: 0 0 15px 0; font-weight: 700; color: #d32f2f; text-align: center;}
+        .rules-list { list-style: none; padding: 0; margin: 0; font-size: 15px; line-height: 1.8; flex: 1; display: flex; flex-direction: column; justify-content: center;}
         .rules-list li { position: relative; padding-left: 25px; margin-bottom: 5px; }
         .rules-list li::before {
             content: attr(data-num);
             position: absolute; left: 0; color: #d32f2f; font-weight: 900;
         }
 
-        /* Центральная часть */
+        /* ИСПРАВЛЕННЫЙ ЦЕНТР - ИДЕАЛЬНОЕ ВЫРАВНИВАНИЕ */
         .center-content {
             grid-column: 2; grid-row: 1 / span 2;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            text-align: center; padding: 0 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Вертикальное центрирование */
+            align-items: center;    /* Горизонтальное центрирование */
+            text-align: center;     /* Центрирование текста внутри строк */
+            padding: 0 30px;
+            height: 100%;
         }
         
-        .server-title { font-weight: 900; font-size: 60px; margin: 0; text-transform: uppercase; line-height: 1; }
+        /* Стили заголовка с тенью для объема */
+        .server-title { 
+            font-weight: 900; 
+            font-size: 65px; 
+            margin: 0; 
+            text-transform: uppercase; 
+            line-height: 0.9; 
+            letter-spacing: -2px;
+            text-shadow: 0 4px 4px rgba(0,0,0,0.5);
+        }
         .server-title span { color: #d32f2f; }
-        .server-desc { font-size: 18px; color: #d32f2f; margin: 15px 0; font-weight: 500; }
-        .server-links { font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 30px; }
-        .main-text { font-size: 16px; max-width: 500px; line-height: 1.6; font-weight: 400; color: #ccc; }
+        
+        .server-desc { 
+            font-size: 20px; 
+            color: #d32f2f; 
+            margin: 20px 0 10px 0; 
+            font-weight: 700; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .server-links { 
+            font-size: 14px; 
+            color: rgba(255,255,255,0.7); 
+            margin-bottom: 40px; 
+            font-weight: 400;
+        }
 
-        /* Карта */
-        .server-block { grid-column: 3; grid-row: 1; display: flex; flex-direction: column; justify-content: center; }
-        .server-stat { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 14px; }
-        .server-stat-label { color: rgba(255,255,255,0.6); }
+        .welcome-text {
+            color: #ccc; 
+            font-size: 15px; 
+            max-width: 450px; 
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        /* Карта и Статистика */
+        .server-block { 
+            grid-column: 3; grid-row: 1; 
+            flex-direction: column; 
+            justify-content: center; 
+        }
+        .server-stat { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+        .server-stat-label { color: rgba(255,255,255,0.6); font-weight: 500;}
+        .server-stat-value { font-weight: 700;}
 
         /* Персонал */
-        .staff-block { grid-column: 3; grid-row: 2; }
-        .staff-block h2 { font-size: 22px; margin: 0 0 20px 0; font-weight: 700; }
-        .staff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; }
-        .staff-avatar { 
-            width: 55px; height: 55px; border-radius: 10px; 
-            background: #222; margin: 0 auto 8px; border: 1px solid rgba(255,255,255,0.1); 
+        .staff-block { 
+            grid-column: 3; grid-row: 2; 
+            flex-direction: column;
         }
-        .staff-name { font-size: 14px; font-weight: 700; }
-        .staff-rank { font-size: 11px; color: rgba(255,255,255,0.5); }
+        .staff-block h2 { font-size: 22px; margin: 0 0 20px 0; font-weight: 700; color: #d32f2f; text-align: center;}
+        .staff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; flex: 1; align-items: center;}
+        .staff-avatar { 
+            width: 60px; height: 60px; /* Чуть увеличил */
+            border-radius: 12px; 
+            background: #222; margin: 0 auto 10px; 
+            border: 2px solid rgba(255,255,255,0.1);
+            object-fit: cover;
+            transition: border-color 0.3s;
+        }
+        .staff-item:hover .staff-avatar { border-color: #d32f2f; }
+        .staff-name { font-size: 12px; font-weight: 700; line-height: 1.2;}
+        .staff-rank { font-size: 10px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.5px;}
 
-        /* Загрузка слева */
+        /* Загрузка */
         .loading-bar-wrapper {
-            position: fixed;
-            bottom: 40px;
-            left: 5%; 
-            width: 28%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
-            font-weight: 900;
-            z-index: 20;
+            position: fixed; bottom: 40px; left: 5%; width: 28%;
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 14px; font-weight: 900; z-index: 20;
+            text-transform: uppercase;
         }
         
-        .load-status { text-transform: uppercase; letter-spacing: 2px; }
-        .load-percent { color: #d32f2f; }
+        .load-percent { color: #d32f2f; font-size: 16px;}
         
         .bottom-loading-bar {
-            position: fixed;
-            bottom: 30px;
-            left: 5%;
-            width: 28%;
-            height: 4px;
-            background: rgba(255,255,255,0.1);
-            z-index: 20;
+            position: fixed; bottom: 30px; left: 5%; width: 28%; height: 5px;
+            background: rgba(255,255,255,0.1); z-index: 20;
+            border-radius: 2px; overflow: hidden;
         }
         
         #progress-bar-fill {
-            width: 0%;
-            height: 100%;
-            background: #d32f2f;
-            transition: width 0.3s;
+            width: 0%; height: 100%; background: #d32f2f; transition: width 0.3s ease-out;
         }
 
         .blink { animation: blinker 1.5s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0.3; } }
+        @keyframes blinker { 50% { opacity: 0.4; } }
     </style>
 </head>
 <body>
@@ -167,12 +197,10 @@
     <div class="main-wrapper">
         
         <div class="info-block player-block">
-            <div class="avatar-placeholder">
-                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-            </div>
+            <img id="player-avatar" src="https://www.steamid.xyz/avatar/default.png" alt="Avatar">
             <div class="player-data">
-                <div><span class="data-label">Никнейм:</span> <span id="playername">Игрок</span></div>
-                <div><span class="data-label">SteamID:</span> <span id="steamid">Loading...</span></div>
+                <div><span class="data-label">Никнейм:</span> <span id="playername" style="font-weight:700;">Игрок</span></div>
+                <div><span class="data-label">SteamID:</span> <span id="steamid" style="font-size:12px; color:#aaa;">Loading...</span></div>
             </div>
         </div>
 
@@ -190,49 +218,51 @@
         </div>
 
         <div class="center-content">
-            <h1 class="server-title">SPN ・ <span>★</span> BORDER</h1>
-            <h1 class="server-title">RP <span>★</span></h1>
+            <h1 class="server-title">SPN ・ <span>★</span></h1>
+            <h1 class="server-title">BORDER RP</h1>
+            
             <p class="server-desc">Уникальный опыт RolePlay</p>
+            
             <div class="server-links">
-                Группа ВК: vk.com/spnborder | Discord: https://discord.gg/csqPk4TZCx
+                vk.com/spnborder | Discord: discord.gg/csqPk4TZCx
             </div>
-            <p class="main-text">
-                Добро пожаловать! Мы создали этот сервер для тех, кто ценит качественный отыгрыш и стабильную игру. Удачи!
+            
+            <p class="welcome-text">
+                Добро пожаловать! Мы ценим качественный отыгрыш и стабильную игру. Удачи в мире BORDER RP!
             </p>
         </div>
 
         <div class="info-block server-block">
-            <div class="server-stat"><span class="server-stat-label">Карта:</span> <span id="mapname">Загрузка...</span></div>
-            <div class="server-stat"><span class="server-stat-label">Режим:</span> <span>RolePlay</span></div>
-            <div class="server-stat"><span class="server-stat-label">Слотов:</span> <span>100 / 128</span></div>
+            <div class="server-stat"><span class="server-stat-label">Карта:</span> <span id="mapname" class="server-stat-value">Загрузка...</span></div>
+            <div class="server-stat"><span class="server-stat-label">Режим:</span> <span class="server-stat-value">RolePlay</span></div>
+            <div class="server-stat"><span class="server-stat-label">Игроков:</span> <span class="server-stat-value"><span id="slots">0</span> / <span id="maxplayers">128</span></span></div>
         </div>
 
         <div class="info-block staff-block">
-            <h2>Персонал сервера</h2>
-<div class="staff-item">
-    <img src="tasid.png" class="staff-avatar">
-    <div class="staff-name">De Lacure</div>
-    <div class="staff-rank">Создатель</div>
-</div>
-
-<div class="staff-item">
-    <img src="zrasy.png" class="staff-avatar">
-    <div class="staff-name">Adolf Miller</div>
-    <div class="staff-rank">Руководитель</div>
-</div>
-
-<div class="staff-item">
-    <img src="daltron.png" class="staff-avatar">
-    <div class="staff-name">Veil Maier</div>
-    <div class="staff-rank">Куратор</div>
-</div>
+            <h2>Персонал</h2>
+            <div class="staff-grid">
+                <div class="staff-item">
+                    <img src="tasid.png" class="staff-avatar" alt="Tasid">
+                    <div class="staff-name">De Lacure</div>
+                    <div class="staff-rank">Создатель</div>
+                </div>
+                <div class="staff-item">
+                    <img src="zrasy.png" class="staff-avatar" alt="Zrasy">
+                    <div class="staff-name">Adolf Miller</div>
+                    <div class="staff-rank">Руководитель</div>
+                </div>
+                <div class="staff-item">
+                    <img src="daltron.png" class="staff-avatar" alt="Daltron">
+                    <div class="staff-name">Veil Maier</div>
+                    <div class="staff-rank">Куратор</div>
+                </div>
             </div>
         </div>
 
     </div>
 
     <div class="loading-bar-wrapper">
-        <div class="load-status blink" id="status">Загрузка файлов...</div>
+        <div class="load-status blink" id="status">Загрузка данных...</div>
         <div class="load-percent" id="percent">0%</div>
     </div>
     <div class="bottom-loading-bar">
@@ -241,17 +271,31 @@
 
     <script type="text/javascript">
         var music = document.getElementById("loading-music");
-        music.volume = 0.2; // Громкость 20%
+        music.volume = 0.5; // Громкость 50%
 
+        // Вызывается GMod
         function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
             document.getElementById('mapname').innerHTML = mapname;
             document.getElementById('steamid').innerHTML = steamid;
+            document.getElementById('maxplayers').innerHTML = maxplayers;
+
+            // Аватарка по SteamID64
+            if (steamid.length > 5) {
+                document.getElementById('player-avatar').src = "https://www.steamid.xyz/avatar/" + steamid + ".png";
+            }
         }
 
+        // Вызывается GMod
+        function SetPlayerName(name) {
+            document.getElementById('playername').innerHTML = name;
+        }
+
+        // Вызывается GMod
         function SetStatusChanged(status) {
             document.getElementById('status').innerHTML = status.toUpperCase();
         }
 
+        // Прогресс
         var totalFiles = 100;
         function SetFilesTotal(total) { totalFiles = total; }
 
