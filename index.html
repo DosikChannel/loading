@@ -2,198 +2,238 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>SPN BORDER RP</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    
+    <title>SPN TEAM | BORDER RP</title>
     <style>
-        * { box-sizing: border-box; user-select: none; margin: 0; padding: 0; }
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Montserrat:wght@400;700&display=swap');
 
-        body {
-            font-family: 'Roboto', sans-serif;
-            color: #eeeeee;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-            background-color: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .bg-media {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -2;
-        }
-        
-        #bg-image {
+        body, html {
+            margin: 0;
+            padding: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            filter: brightness(0.35);
+            overflow: hidden;
+            /* Используем твой background.png */
+            background: #000 url('background.png') no-repeat center center;
+            background-size: cover;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        .main-wrapper {
-            display: grid;
-            grid-template-columns: 28% 1fr 28%;
-            grid-template-rows: auto 1fr;
-            gap: 20px;
-            width: 90%;
-            height: 85%;
+        .vignette {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.7) 100%);
+            z-index: 1;
+        }
+
+        .top-left-panel {
+            position: absolute;
+            top: 40px;
+            left: 50px;
+            display: flex;
+            align-items: center;
             z-index: 10;
         }
 
+        .accent-line {
+            width: 5px;
+            height: 30px;
+            background: #ffcc00;
+            margin-right: 15px;
+        }
+
+        .server-brand {
+            font-family: 'Oswald', sans-serif;
+            font-size: 32px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-right: 20px;
+        }
+
+        .yellow-badge {
+            background: #ffcc00;
+            color: black;
+            padding: 4px 15px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 3px;
+            text-transform: uppercase;
+        }
+
+        .top-right-info {
+            position: absolute;
+            top: 40px;
+            right: 50px;
+            text-align: right;
+            z-index: 10;
+            font-family: 'Oswald', sans-serif;
+            letter-spacing: 1px;
+            padding-right: 15px;
+            border-right: 4px solid #ff3300;
+        }
+
+        .top-right-info .label { font-size: 14px; color: #ff3300; text-transform: uppercase; }
+        .top-right-info .value { font-size: 22px; color: white; text-transform: uppercase; margin-top: -5px; }
+        .top-right-info .alert-text { font-size: 12px; color: #ffcc00; margin-top: 5px; font-weight: 400; font-family: 'Montserrat'; }
+
         .info-block {
-            background: rgba(0, 0, 0, 0.85); 
-            border-radius: 12px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: absolute;
+            bottom: 125px;
+            left: 50px;
+            z-index: 10;
+            max-width: 850px;
+        }
+
+        #main-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 50px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            color: #ffcc00;
+            transition: opacity 0.5s;
+        }
+
+        #sub-text {
+            font-size: 18px;
+            color: #eee;
+            line-height: 1.5;
+            transition: opacity 0.5s;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .loader-container {
+            position: absolute;
+            bottom: 45px;
+            left: 50px;
+            width: 350px;
+            z-index: 10;
+        }
+
+        .loader-status {
             display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            color: #ffcc00;
         }
 
-        .player-block { grid-column: 1; grid-row: 1; align-items: center; }
-        #player-avatar {
-            width: 55px; height: 55px;
-            border-radius: 8px; margin-right: 15px;
-            background-color: #333; object-fit: cover;
-            border: 1px solid rgba(255,255,255,0.1);
+        .progress-track {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
         }
-        .player-data { font-size: 14px; flex: 1; overflow: hidden; }
-        .data-label { color: rgba(255,255,255,0.6); }
 
-        .rules-block { grid-column: 1; grid-row: 2; flex-direction: column; }
-        .rules-block h2 { font-size: 22px; margin: 0 0 15px 0; font-weight: 700; color: #d32f2f; text-align: center;}
-        .rules-list { list-style: none; padding: 0; margin: 0; font-size: 15px; line-height: 1.8; flex: 1; display: flex; flex-direction: column; justify-content: center;}
-        .rules-list li { position: relative; padding-left: 25px; margin-bottom: 5px; }
-        .rules-list li::before { content: attr(data-num); position: absolute; left: 0; color: #d32f2f; font-weight: 900; }
-
-        .center-content {
-            grid-column: 2; grid-row: 1 / span 2;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            text-align: center; padding: 0 30px;
+        #progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #ffcc00;
+            box-shadow: 0 0 12px rgba(255, 204, 0, 0.7);
+            transition: width 0.3s ease;
         }
-        .server-title { font-weight: 900; font-size: 65px; margin: 0; text-transform: uppercase; line-height: 0.9; text-shadow: 0 4px 4px rgba(0,0,0,0.5); }
-        .server-title span { color: #d32f2f; }
-        .server-desc { font-size: 20px; color: #d32f2f; margin: 20px 0 10px 0; font-weight: 700; text-transform: uppercase; }
-        .server-links { font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 40px; }
-        .welcome-text { color: #ccc; font-size: 15px; max-width: 450px; line-height: 1.6; font-weight: 300; }
-
-        .server-block { grid-column: 3; grid-row: 1; flex-direction: column; justify-content: center; }
-        .server-stat { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 15px; }
-        .server-stat-label { color: rgba(255,255,255,0.6); }
-        .server-stat-value { font-weight: 700; }
-
-        .staff-block { grid-column: 3; grid-row: 2; flex-direction: column; }
-        .staff-block h2 { font-size: 22px; margin: 0 0 15px 0; font-weight: 700; color: #d32f2f; text-align: center;}
-        .staff-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; text-align: center; flex: 1; align-items: center; }
-        .staff-avatar { width: 50px; height: 50px; border-radius: 10px; background: #222; margin: 0 auto 5px; border: 2px solid rgba(255,255,255,0.1); object-fit: cover; }
-        .staff-name { font-size: 11px; font-weight: 700; white-space: nowrap; }
-        .staff-rank { font-size: 9px; color: rgba(255,255,255,0.5); text-transform: uppercase; }
-
-        .loading-bar-wrapper { position: fixed; bottom: 40px; left: 5%; width: 28%; display: flex; justify-content: space-between; align-items: center; z-index: 20; text-transform: uppercase; font-weight: 900; }
-        .load-percent { color: #d32f2f; font-size: 16px;}
-        .bottom-loading-bar { position: fixed; bottom: 30px; left: 5%; width: 28%; height: 5px; background: rgba(255,255,255,0.1); z-index: 20; border-radius: 2px; overflow: hidden; }
-        #progress-bar-fill { width: 0%; height: 100%; background: #d32f2f; transition: width 0.3s ease-out; }
-        .blink { animation: blinker 1.5s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0.4; } }
     </style>
 </head>
 <body>
 
-    <div class="bg-media"><img src="background.png" id="bg-image"></div>
-    <audio id="loading-music" src="music.mp3" autoplay loop></audio>
+<!-- Добавлена музыка -->
+<audio id="loading-music" src="music.mp3" autoplay loop></audio>
 
-    <div class="main-wrapper">
-        <div class="info-block player-block">
-            <img id="player-avatar" src="https://steamcommunity-a.akamaihd.net/navigation/images/avatars/default_avatar.jpg">
-            <div class="player-data">
-                <div><span class="data-label">Ник:</span> <span id="playername" style="font-weight:700;">Поиск...</span></div>
-                <div><span class="data-label">ID:</span> <span id="steamid" style="font-size:11px; color:#aaa;">Загрузка...</span></div>
-            </div>
-        </div>
+<div class="vignette"></div>
 
-        <div class="info-block rules-block">
-            <h2>Правила Сервера</h2>
-            <ul class="rules-list">
-                <li data-num="1">Запрещено RDM.</li>
-                <li data-num="2">Соблюдайте NLR.</li>
-                <li data-num="3">Запрещен спам/флуд.</li>
-                <li data-num="4">Оскорбления недопустимы.</li>
-                <li data-num="5">Читерство = Бан.</li>
-                <li data-num="6">Багоюз строго карается.</li>
-                <li data-num="7">Полные правила в !motd.</li>
-            </ul>
-        </div>
+<div class="top-left-panel">
+    <div class="accent-line"></div>
+    <div class="server-brand">ARSTOTZKA RP</div>
+    <div class="yellow-badge">SPN TEAM</div>
+</div>
 
-        <div class="center-content">
-            <h1 class="server-title">SPN ・ <span>★</span></h1>
-            <h1 class="server-title">BORDER RP</h1>
-            <p class="server-desc">Уникальный опыт RolePlay</p>
-            <div class="server-links">vk.com/spnborder | Discord: discord.gg/csqPk4TZCx</div>
-            <p class="welcome-text">Добро пожаловать! Мы ценим качественный отыгрыш и стабильную игру. Удачи в мире BORDER RP!</p>
-        </div>
+<div class="top-right-info">
+    <div class="label">Статус Границы</div>
+    <div class="value" style="color: #ff3300;">ЗАКРЫТО / ОСАДА</div>
+    <div class="alert-text">ПРИКАЗ №4: ОГОНЬ НА ПОРАЖЕНИЕ</div>
+    <div class="label" style="margin-top: 10px;">Дата</div>
+    <div class="value" id="live-date">02.05.2026</div>
+</div>
 
-        <div class="info-block server-block">
-            <div class="server-stat"><span class="server-stat-label">Карта:</span> <span id="mapname" class="server-stat-value">...</span></div>
-            <div class="server-stat"><span class="server-stat-label">Режим:</span> <span class="server-stat-value">RolePlay</span></div>
-            <div class="server-stat"><span class="server-stat-label">Игроков:</span> <span class="server-stat-value"><span id="slots">0</span> / <span id="maxplayers">128</span></span></div>
-        </div>
+<div class="info-block">
+    <div id="main-title">АРСТОЦКА: СТРАНА СТРАХА</div>
+    <div id="sub-text">Тоталитарное государство, зажатое между враждебными соседями. После революции 1953 года страна живёт в состоянии «перманентной осады». Единственное, что спасает нас от хаоса — это граница.</div>
+</div>
 
-        <div class="info-block staff-block">
-            <h2>Персонал</h2>
-            <div class="staff-grid">
-                <div class="staff-item"><img src="tasid.png" class="staff-avatar"><div class="staff-name">De Lacure</div><div class="staff-rank">Создатель</div></div>
-                <div class="staff-item"><img src="zrasy.png" class="staff-avatar"><div class="staff-name">Adolf Miller</div><div class="staff-rank">Руководитель</div></div>
-                <div class="staff-item"><img src="daltron.png" class="staff-avatar"><div class="staff-name">Veil Maier</div><div class="staff-rank">Куратор</div></div>
-                <div class="staff-item"><img src="admin.png" class="staff-avatar"><div class="staff-name">Paul Hausser</div><div class="staff-rank">Гл. Управляющий</div></div>
-            </div>
-        </div>
+<div class="loader-container">
+    <div class="loader-status">
+        <span id="status-label">Проверка документов...</span>
+        <span id="percent-label">0%</span>
     </div>
-
-    <div class="loading-bar-wrapper">
-        <div class="load-status blink" id="status">Подключение...</div>
-        <div class="load-percent" id="percent">0%</div>
+    <div class="progress-track">
+        <div id="progress-fill"></div>
     </div>
-    <div class="bottom-loading-bar"><div id="progress-bar-fill"></div></div>
+</div>
 
-    <script type="text/javascript">
-        // Громкость музыки
-        var music = document.getElementById("loading-music");
-        if(music) music.volume = 0.3;
+<script>
+    // Настройка громкости музыки
+    var music = document.getElementById("loading-music");
+    if(music) music.volume = 0.3;
 
-        // ГЛАВНАЯ ФУНКЦИЯ ДЛЯ GMOD
-        function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
-            document.getElementById('mapname').innerHTML = mapname;
-            document.getElementById('maxplayers').innerHTML = maxplayers;
-            document.getElementById('steamid').innerHTML = steamid;
+    function updateDate() {
+        const now = new Date();
+        const d = String(now.getDate()).padStart(2, '0');
+        const m = String(now.getMonth() + 1).padStart(2, '0');
+        const y = now.getFullYear();
+        document.getElementById('live-date').innerText = `${d}.${m}.${y}`;
+    }
+    updateDate();
 
-            // Если GMod передал SteamID, тянем аватарку
-            if (steamid && steamid !== "" && steamid !== "0") {
-                document.getElementById('player-avatar').src = "https://www.steamid.xyz/avatar/" + steamid + ".png";
-            }
+    const content = [
+        { 
+            t: "АРСТОЦКА: СТРАНА СТРАХА", 
+            s: "Тоталитарное государство, зажатое между враждебными соседями. Снаружи — враги. Внутри — шпионы. «Граница — это скальпель, который вырезает раковую опухоль из тела государства.»" 
+        },
+        { 
+            t: "КПП «ВОСТОЧНЫЙ КОРДОН»", 
+            s: "Единственная дверь в страну. Через этот пункт проходит 90% трафика: рабочие из Колечии, беженцы из Антрегрии и шпионы под видом туристов. Ошибка инспектора стоит жизни." 
+        },
+        { 
+            t: "СУТЬ ВЗАИМОДЕЙСТВИЯ", 
+            s: "Инспекторы проверяют документы. Граждане хотят попасть в страну — честно или обманом. Будьте готовы к обыскам — безопасность Секретаря С. превыше всего." 
+        },
+        { 
+            t: "ПРАВИЛА ПОВЕДЕНИЯ", 
+            s: "Предъявляйте документы спокойно. Попытка побега карается немедленным задержанием. Ваша фантазия — предел вашего РП. Слава Арстоцке!" 
         }
+    ];
 
-        // ФУНКЦИЯ ДЛЯ ИМЕНИ
-        function SetPlayerName(name) {
-            if (name && name !== "" && name !== "Player") {
-                document.getElementById('playername').innerHTML = name;
-            }
-        }
+    let idx = 0;
+    setInterval(() => {
+        const t = document.getElementById('main-title');
+        const s = document.getElementById('sub-text');
+        if(!t || !s) return;
+        t.style.opacity = 0;
+        s.style.opacity = 0;
+        setTimeout(() => {
+            idx = (idx + 1) % content.length;
+            t.innerText = content[idx].t;
+            s.innerText = content[idx].s;
+            t.style.opacity = 1;
+            s.style.opacity = 1;
+        }, 500);
+    }, 10000);
 
-        // СТАТУС ЗАГРУЗКИ
-        function SetStatusChanged(status) {
-            document.getElementById('status').innerHTML = status.toUpperCase();
-        }
+    // Функции интеграции с GMod
+    function SetStatusChanged(status) { 
+        document.getElementById('status-label').innerText = status.toUpperCase(); 
+    }
+    
+    var totalFiles = 100;
+    function SetFilesTotal(total) { totalFiles = total; }
 
-        // ПРОГРЕСС БАР
-        var totalFiles = 100;
-        function SetFilesTotal(total) { totalFiles = total; }
-        function SetFilesNeeded(needed) {
-            var progress = Math.min(100, Math.floor(((totalFiles - needed) / totalFiles) * 100));
-            document.getElementById('progress-bar-fill').style.width = progress + '%';
-            document.getElementById('percent').innerHTML = progress + '%';
-        }
-    </script>
+    function SetFilesNeeded(needed) {
+        let val = Math.max(0, Math.min(100, Math.floor(((totalFiles - needed) / totalFiles) * 100)));
+        document.getElementById('progress-fill').style.width = val + '%';
+        document.getElementById('percent-label').innerText = val + '%';
+    }
+</script>
+
 </body>
 </html>
