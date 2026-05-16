@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>SPN TEAM | BORDER RP</title>
+    <title>MDT TEAM | ОДКБ vs НАТО</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Montserrat:wght@400;700&display=swap');
 
@@ -16,6 +16,7 @@
             background-size: cover;
             color: white;
             font-family: 'Montserrat', sans-serif;
+            transition: background-image 0.8s ease-in-out;
         }
 
         .vignette {
@@ -37,7 +38,7 @@
         .accent-line {
             width: 5px;
             height: 30px;
-            background: #ffcc00;
+            background: #ff3300; 
             margin-right: 15px;
         }
 
@@ -47,11 +48,21 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px; /* Удобный отступ между картинкой-эмодзи и текстом */
+        }
+
+        /* Стиль для точного отображения эмодзи как в Discord */
+        .discord-emoji {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
         }
 
         .yellow-badge {
-            background: #ffcc00;
-            color: black;
+            background: #ff3300; 
+            color: white;
             padding: 4px 15px;
             font-family: 'Oswald', sans-serif;
             font-size: 18px;
@@ -128,8 +139,8 @@
         #progress-fill {
             width: 0%;
             height: 100%;
-            background: #ffcc00;
-            box-shadow: 0 0 12px rgba(255, 204, 0, 0.7);
+            background: #ff3300;
+            box-shadow: 0 0 12px rgba(255, 51, 0, 0.7);
             transition: width 0.3s ease;
         }
     </style>
@@ -142,26 +153,29 @@
 
 <div class="top-left-panel">
     <div class="accent-line"></div>
-    <div class="server-brand">BORDER RP</div>
-    <div class="yellow-badge">SPN TEAM</div>
+    <div class="server-brand">
+        <img class="discord-emoji" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f4ab.svg" alt="dizzy">
+        ОДКБ vs НАТО
+    </div>
+    <div class="yellow-badge">MDT TEAM</div>
 </div>
 
 <div class="top-right-info">
-    <div class="label">Статус Границы</div>
-    <div class="value" style="color: #ff3300;">ЗАКРЫТО / ОСАДА</div>
-    <div class="alert-text">ПРИКАЗ №4: ОГОНЬ НА ПОРАЖЕНИЕ</div>
+    <div class="label">Текущее положение</div>
+    <div class="value" style="color: #ff3300;">ГЛОБАЛЬНЫЙ КОНФЛИКТ</div>
+    <div class="alert-text">ВВЕДЕНО ВОЕННОЕ ПОЛОЖЕНИЕ</div>
     <div class="label" style="margin-top: 10px;">Дата</div>
-    <div class="value" id="live-date">02.05.2026</div>
+    <div class="value" id="live-date">16.05.2026</div>
 </div>
 
 <div class="info-block">
-    <div id="main-title">BORDER RP: ТЕРРИТОРИЯ КОНТРОЛЯ</div>
-    <div id="sub-text">Государство находится в состоянии «перманентной осады». Снаружи — враги. Внутри — шпионы. Единственное, что спасает систему от хаоса — это жесткий пограничный контроль.</div>
+    <div id="main-title">ОДКБ vs НАТО: НА ЛИНИИ ОГНЯ</div>
+    <div id="sub-text">Мир раскалился до предела. Столкновение двух сильнейших военных альянсов неизбежно. Чью сторону займешь ты в этой тотальной войне за доминирование?</div>
 </div>
 
 <div class="loader-container">
     <div class="loader-status">
-        <span id="status-label">Идентификация...</span>
+        <span id="status-label">Шифрование канала связи...</span>
         <span id="percent-label">0%</span>
     </div>
     <div class="progress-track">
@@ -184,20 +198,24 @@
 
     const content = [
         { 
-            t: "BORDER RP: ТЕРРИТОРИЯ КОНТРОЛЯ", 
-            s: "Государство зажато между враждебными соседями. Снаружи — враги. Внутри — шпионы. «Граница — это скальпель, который вырезает раковую опухоль из тела государства.»" 
+            t: "ОДКБ vs НАТО: НА ЛИНИИ ОГНЯ", 
+            s: "Мир раскалился до предела. Столкновение двух сильнейших военных альянсов неизбежно. Чью сторону займешь ты в этой тотальной войне за доминирование?",
+            bg: "background.png"
         },
         { 
-            t: "КПП «ВОСТОЧНЫЙ КОРДОН»", 
-            s: "Единственная дверь в страну. Через этот пункт проходит 90% трафика: рабочие, беженцы и шпионы под видом туристов. Ошибка инспектора стоит жизни." 
+            t: "ФРОНТОВАЯ ПЕРЕДОВАЯ", 
+            s: "Артиллерийские дуэли не утихают ни на минуту. Города превратились в укрепрайоны, а приказы командования не обсуждаются. Каждый шаг может стать последним.",
+            bg: "background1.png"
         },
         { 
-            t: "СУТЬ ВЗАИМОДЕЙСТВИЯ", 
-            s: "Инспекторы проверяют документы. Граждане хотят попасть в страну — честно или обманом. Будьте готовы к обыскам — безопасность Секретаря С. превыше всего." 
+            t: "ВОЕННАЯ СТРАТЕГИЯ", 
+            s: "Координируйте действия со своим штабом, используйте современную технику и тактическое превосходство. Победа куется жесткой дисциплиной и слаженностью боя.",
+            bg: "background2.png"
         },
         { 
-            t: "ПРАВИЛА ПОВЕДЕНИЯ", 
-            s: "Предъявляйте документы спокойно. Попытка побега карается немедленным задержанием. Ваша фантазия — предел вашего РП. Добро пожаловать на Border RP!" 
+            t: "ВРЕМЯ ВЫБИРАТЬ СТОРОНУ", 
+            s: "Защищать рубежи ОДКБ или продвигать интересы альянса НАТО? Судьба этого противостояния теперь зависит исключительно от твоих тактических решений.",
+            bg: "background.png"
         }
     ];
 
@@ -205,13 +223,18 @@
     setInterval(() => {
         const t = document.getElementById('main-title');
         const s = document.getElementById('sub-text');
+        const body = document.body;
         if(!t || !s) return;
+        
         t.style.opacity = 0;
         s.style.opacity = 0;
+        
         setTimeout(() => {
             idx = (idx + 1) % content.length;
             t.innerText = content[idx].t;
             s.innerText = content[idx].s;
+            body.style.backgroundImage = `url('${content[idx].bg}')`;
+            
             t.style.opacity = 1;
             s.style.opacity = 1;
         }, 500);
